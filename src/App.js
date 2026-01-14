@@ -5,11 +5,22 @@ import { GiSpineArrow, GiMedicalPack } from 'react-icons/gi';
 import { MdHealthAndSafety } from 'react-icons/md';
 
 function App() {
+  const PHONE_TEL = '0720088880';
+  const PHONE_DISPLAY = '0720 088 880';
+
   const [isVisible, setIsVisible] = useState({});
   const [counters, setCounters] = useState({ experience: 0, patients: 0, success: 0 });
   const [hasAnimated, setHasAnimated] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 639px)').matches;
+  });
+  const [hideStickyMobile, setHideStickyMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.localStorage.getItem('kp_hideStickyMobile') === '1';
+  });
   const counterRef = useRef(null);
 
   useEffect(() => {
@@ -19,6 +30,24 @@ function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)');
+    const onChange = (e) => setIsMobile(e.matches);
+    // Set initial (some browsers need it)
+    setIsMobile(mq.matches);
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else mq.addListener(onChange);
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener('change', onChange);
+      else mq.removeListener(onChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (hideStickyMobile) window.localStorage.setItem('kp_hideStickyMobile', '1');
+    else window.localStorage.removeItem('kp_hideStickyMobile');
+  }, [hideStickyMobile]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -99,6 +128,47 @@ function App() {
 
   return (
     <div className="App bg-white">
+      {/* Sticky note (concept demo) */}
+      {(!isMobile || !hideStickyMobile) && (
+        <div className="fixed bottom-4 left-4 z-[60] max-w-[260px] sm:max-w-sm">
+          <div className="relative rounded-2xl border border-yellow-300 bg-yellow-100/95 shadow-xl backdrop-blur-md p-4 sm:p-5">
+            {/* Mobile close */}
+            <button
+              type="button"
+              onClick={() => setHideStickyMobile(true)}
+              className="sm:hidden absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white text-gray-700 shadow-md border border-gray-200 hover:bg-gray-50"
+              aria-label="Ascunde nota"
+              title="Ascunde"
+            >
+              ×
+            </button>
+
+            <p className="text-[12px] sm:text-sm text-gray-900 leading-snug">
+              <span className="font-semibold">Concept demo</span> • Conținut orientativ • Dezvoltat de{' '}
+              <a
+                href="https://sky.ro"
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold underline underline-offset-2 hover:text-primary-700"
+              >
+                sky.ro
+              </a>
+            </p>
+
+            <a
+              href={`tel:${PHONE_TEL}`}
+              className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5 text-white font-semibold shadow-lg hover:bg-primary-700 transition-colors"
+            >
+              Vreau varianta finală!
+            </a>
+
+            <p className="mt-2 text-[11px] text-gray-600">
+              Telefon: <span className="font-semibold text-gray-700">{PHONE_DISPLAY}</span>
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/98 backdrop-blur-md shadow-lg border-b border-gray-100 py-2 md:py-3' : 'bg-white/95 backdrop-blur-sm shadow-md border-b border-gray-100 py-3 md:py-4'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -113,7 +183,7 @@ function App() {
               <a href="#contact" className="px-4 py-2 text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all font-medium">Contact</a>
             </div>
             <div className="flex items-center space-x-3">
-              <a href="tel:0771572678" className="hidden md:flex items-center space-x-2 bg-primary-600 text-white px-6 py-2.5 rounded-xl hover:bg-primary-700 transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
+              <a href={`tel:${PHONE_TEL}`} className="hidden md:flex items-center space-x-2 bg-primary-600 text-white px-6 py-2.5 rounded-xl hover:bg-primary-700 transition-all font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
                 <FaPhone className="w-4 h-4" />
                 <span>Programează-te</span>
               </a>
@@ -140,7 +210,7 @@ function App() {
               <a href="#servicii" onClick={() => setMobileMenuOpen(false)} className="block text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium py-3 px-4 rounded-lg">Servicii</a>
               <a href="#testimoniale" onClick={() => setMobileMenuOpen(false)} className="block text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium py-3 px-4 rounded-lg">Testimoniale</a>
               <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium py-3 px-4 rounded-lg">Contact</a>
-              <a href="tel:0771572678" className="flex items-center justify-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-xl hover:bg-primary-700 transition-all font-semibold shadow-lg mt-2">
+              <a href={`tel:${PHONE_TEL}`} className="flex items-center justify-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-xl hover:bg-primary-700 transition-all font-semibold shadow-lg mt-2">
                 <FaPhone className="w-4 h-4" />
                 <span>Programează-te</span>
               </a>
@@ -537,8 +607,8 @@ function App() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-1">Telefon</h3>
-                  <a href="tel:0771572678" className="text-sm text-white/90 hover:text-white transition-colors">
-                    0771 572 678
+                  <a href={`tel:${PHONE_TEL}`} className="text-sm text-white/90 hover:text-white transition-colors">
+                    {PHONE_DISPLAY}
                   </a>
                 </div>
               </div>
@@ -574,7 +644,7 @@ function App() {
               </div>
 
               <div className="mt-6">
-                <a href="tel:0771572678" className="block w-full bg-white text-primary-600 text-center px-6 py-3 rounded-xl hover:bg-gray-100 transition-all transform hover:scale-105 font-semibold text-base shadow-xl">
+                <a href={`tel:${PHONE_TEL}`} className="block w-full bg-white text-primary-600 text-center px-6 py-3 rounded-xl hover:bg-gray-100 transition-all transform hover:scale-105 font-semibold text-base shadow-xl">
                   Sună Acum
                 </a>
               </div>
@@ -620,7 +690,7 @@ function App() {
             <div>
               <h4 className="text-base font-semibold mb-4 text-primary-400">Contact Rapid</h4>
               <ul className="space-y-2 text-gray-400">
-                <li className="text-sm">Tel: <a href="tel:0771572678" className="hover:text-primary-400 transition-colors">0771 572 678</a></li>
+                <li className="text-sm">Tel: <a href={`tel:${PHONE_TEL}`} className="hover:text-primary-400 transition-colors">{PHONE_DISPLAY}</a></li>
                 <li className="text-sm">Email: <a href="mailto:coman.fane@yahoo.com" className="hover:text-primary-400 transition-colors break-all">coman.fane@yahoo.com</a></li>
               </ul>
             </div>
