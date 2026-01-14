@@ -1,0 +1,36 @@
+/* Quinta Pro Light Font - Add your font files to public/fonts/ directory */
+@font-face {
+  font-family: 'Quinta Pro';
+  src: url('/fonts/QuintaPro-Light.woff2') format('woff2'),
+       url('/fonts/QuintaPro-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quinta Pro';
+  src: url('/fonts/QuintaPro-Regular.woff2') format('woff2'),
+       url('/fonts/QuintaPro-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quinta Pro';
+  src: url('/fonts/QuintaPro-Medium.woff2') format('woff2'),
+       url('/fonts/QuintaPro-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quinta Pro';
+  src: url('/fonts/QuintaPro-SemiBold.woff2') format('woff2'),
+       url('/fonts/QuintaPro-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
