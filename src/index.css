@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --promo-bar-height: 44px;
+  /* Fixed top promo bar height (layout offset reference) */
+  --promo-bar-height: 40px;
 }
 
 @layer base {

@@ -7,6 +7,9 @@ import { MdHealthAndSafety } from 'react-icons/md';
 function App() {
   const PHONE_TEL = '0720088880';
   const PHONE_DISPLAY = '0720 088 880';
+  const PROMO_PHONE_TEL = '+40720088880';
+  const PROMO_PHONE_DISPLAY = '+4 0720 088 880';
+  const PROMO_EMAIL = 'dan.trifan@sky.ro';
   const promoOffsetTop = 'calc(var(--promo-bar-height) + env(safe-area-inset-top))';
 
   const [isVisible, setIsVisible] = useState({});
@@ -105,36 +108,69 @@ function App() {
     <div className="App bg-white">
       {/* Promo bar (fixed, full width, above header) */}
       <div
-        className="fixed inset-x-0 top-0 z-[70] border-b border-yellow-300 bg-yellow-100/95 backdrop-blur-md"
+        className="fixed inset-x-0 top-0 z-[100] border-b border-black/10"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
         role="region"
         aria-label="Promo"
       >
-        <div className="h-[var(--promo-bar-height)]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center gap-3">
-            <p className="text-sm sm:text-base font-medium text-gray-950 leading-snug flex-1 min-w-0">
-              <span className="font-semibold">Concept demo</span>
-              <span className="hidden sm:inline"> • Conținut orientativ • Dezvoltat de </span>
+        <div
+          className="h-[var(--promo-bar-height)] w-full"
+          style={{ backgroundColor: '#F2B94B', color: '#1F2933' }}
+        >
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 h-full flex items-center gap-3">
+            {/* Mobile: 3 segments (L / C / R), one line */}
+            <div className="flex w-full items-center md:hidden text-[12px] leading-none">
+              <span className="min-w-0 flex-1 truncate font-normal">Concept demo</span>
+              <span className="flex-none px-2 whitespace-nowrap font-normal">Dezvoltat de sky.ro</span>
+              <a
+                className="flex-none whitespace-nowrap font-normal"
+                href={`tel:${PROMO_PHONE_TEL}`}
+                style={{ color: '#1F2933' }}
+              >
+                {PROMO_PHONE_DISPLAY}
+              </a>
+            </div>
+
+            {/* Tablet/Desktop: single-line full copy */}
+            <p className="hidden md:block flex-1 min-w-0 text-sm leading-none whitespace-nowrap font-normal">
+              Concept demo • Conținut orientativ • Dezvoltat de{' '}
               <a
                 href="https://sky.ro"
                 target="_blank"
                 rel="noreferrer"
-                className="font-semibold underline underline-offset-2 hover:text-primary-700"
+                className="underline underline-offset-2"
+                style={{ color: '#1F2933' }}
               >
                 sky.ro
               </a>
+              {' '}•{' '}
+              <a
+                href={`mailto:${PROMO_EMAIL}`}
+                className="underline underline-offset-2"
+                style={{ color: '#1F2933' }}
+              >
+                {PROMO_EMAIL}
+              </a>
+              {' '}•{' '}
+              <a
+                href={`tel:${PROMO_PHONE_TEL}`}
+                className="underline underline-offset-2"
+                style={{ color: '#1F2933' }}
+              >
+                {PROMO_PHONE_DISPLAY}
+              </a>
             </p>
 
+            {/* CTA: hidden on mobile, shown on tablet/desktop */}
             <a
-              href={`tel:${PHONE_TEL}`}
-              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary-600 px-4 py-2 text-white text-sm font-semibold shadow-lg hover:bg-primary-700 transition-colors"
+              href={`tel:${PROMO_PHONE_TEL}`}
+              className="hidden md:inline-flex shrink-0 items-center justify-center rounded-lg px-3 py-1.5 text-sm font-normal transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={{ backgroundColor: '#2F80ED', color: '#FFFFFF' }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#2569D4')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2F80ED')}
             >
               Vreau varianta finală!
             </a>
-
-            <p className="hidden md:block text-[11px] text-gray-600 shrink-0">
-              Telefon: <span className="font-semibold text-gray-700">{PHONE_DISPLAY}</span>
-            </p>
           </div>
         </div>
       </div>
