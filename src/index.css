@@ -2,9 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --promo-bar-height: 44px;
+}
+
 @layer base {
   body {
     @apply font-sans antialiased;
+    padding-top: calc(var(--promo-bar-height) + env(safe-area-inset-top));
   }
 }
 

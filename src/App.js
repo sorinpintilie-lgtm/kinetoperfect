@@ -7,20 +7,13 @@ import { MdHealthAndSafety } from 'react-icons/md';
 function App() {
   const PHONE_TEL = '0720088880';
   const PHONE_DISPLAY = '0720 088 880';
+  const promoOffsetTop = 'calc(var(--promo-bar-height) + env(safe-area-inset-top))';
 
   const [isVisible, setIsVisible] = useState({});
   const [counters, setCounters] = useState({ experience: 0, patients: 0, success: 0 });
   const [hasAnimated, setHasAnimated] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(max-width: 639px)').matches;
-  });
-  const [hideStickyMobile, setHideStickyMobile] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.localStorage.getItem('kp_hideStickyMobile') === '1';
-  });
   const counterRef = useRef(null);
 
   useEffect(() => {
@@ -30,24 +23,6 @@ function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 639px)');
-    const onChange = (e) => setIsMobile(e.matches);
-    // Set initial (some browsers need it)
-    setIsMobile(mq.matches);
-    if (mq.addEventListener) mq.addEventListener('change', onChange);
-    else mq.addListener(onChange);
-    return () => {
-      if (mq.removeEventListener) mq.removeEventListener('change', onChange);
-      else mq.removeListener(onChange);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (hideStickyMobile) window.localStorage.setItem('kp_hideStickyMobile', '1');
-    else window.localStorage.removeItem('kp_hideStickyMobile');
-  }, [hideStickyMobile]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -128,23 +103,18 @@ function App() {
 
   return (
     <div className="App bg-white">
-      {/* Sticky note (concept demo) */}
-      {(!isMobile || !hideStickyMobile) && (
-        <div className="fixed bottom-4 left-4 z-[60] max-w-[260px] sm:max-w-sm">
-          <div className="relative rounded-2xl border border-yellow-300 bg-yellow-100/95 shadow-xl backdrop-blur-md p-4 sm:p-5">
-            {/* Mobile close */}
-            <button
-              type="button"
-              onClick={() => setHideStickyMobile(true)}
-              className="sm:hidden absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white text-gray-700 shadow-md border border-gray-200 hover:bg-gray-50"
-              aria-label="Ascunde nota"
-              title="Ascunde"
-            >
-              ×
-            </button>
-
-            <p className="text-[12px] sm:text-sm text-gray-900 leading-snug">
-              <span className="font-semibold">Concept demo</span> • Conținut orientativ • Dezvoltat de{' '}
+      {/* Promo bar (fixed, full width, above header) */}
+      <div
+        className="fixed inset-x-0 top-0 z-[70] border-b border-yellow-300 bg-yellow-100/95 backdrop-blur-md"
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+        role="region"
+        aria-label="Promo"
+      >
+        <div className="h-[var(--promo-bar-height)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center gap-3">
+            <p className="text-[12px] sm:text-sm text-gray-900 leading-snug flex-1 min-w-0 truncate">
+              <span className="font-semibold">Concept demo</span>
+              <span className="hidden sm:inline"> • Conținut orientativ • Dezvoltat de </span>
               <a
                 href="https://sky.ro"
                 target="_blank"
@@ -157,20 +127,23 @@ function App() {
 
             <a
               href={`tel:${PHONE_TEL}`}
-              className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-primary-600 px-4 py-2.5 text-white font-semibold shadow-lg hover:bg-primary-700 transition-colors"
+              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary-600 px-4 py-2 text-white text-sm font-semibold shadow-lg hover:bg-primary-700 transition-colors"
             >
               Vreau varianta finală!
             </a>
 
-            <p className="mt-2 text-[11px] text-gray-600">
+            <p className="hidden md:block text-[11px] text-gray-600 shrink-0">
               Telefon: <span className="font-semibold text-gray-700">{PHONE_DISPLAY}</span>
             </p>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/98 backdrop-blur-md shadow-lg border-b border-gray-100 py-2 md:py-3' : 'bg-white/95 backdrop-blur-sm shadow-md border-b border-gray-100 py-3 md:py-4'}`}>
+      <nav
+        className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/98 backdrop-blur-md shadow-lg border-b border-gray-100 py-2 md:py-3' : 'bg-white/95 backdrop-blur-sm shadow-md border-b border-gray-100 py-3 md:py-4'}`}
+        style={{ top: promoOffsetTop }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
