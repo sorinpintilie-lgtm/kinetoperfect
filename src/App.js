@@ -112,7 +112,7 @@ function App() {
       >
         <div className="h-[var(--promo-bar-height)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center gap-3">
-            <p className="text-[12px] sm:text-sm text-gray-900 leading-snug flex-1 min-w-0 truncate">
+            <p className="text-sm sm:text-base font-medium text-gray-950 leading-snug flex-1 min-w-0">
               <span className="font-semibold">Concept demo</span>
               <span className="hidden sm:inline"> • Conținut orientativ • Dezvoltat de </span>
               <a
